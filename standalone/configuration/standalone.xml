@@ -53,6 +53,16 @@
                     <properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
                 </authorization>
             </security-realm>
+
+            <!-- Enabling SSL/HTTPS -->
+            <security-realm name="UndertowRealm">
+              <server-identities>
+                <ssl>
+                  <!-- change to your location of your keystore and password -->
+                  <keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="welcome1" />
+                </ssl>
+              </server-identities>
+            </security-realm>
         </security-realms>
         <audit-log>
             <formatters>
@@ -358,6 +368,9 @@
             <buffer-cache name="default"/>
             <server name="default-server">
                 <http-listener name="default" socket-binding="http" redirect-socket="https"/>
+
+                <!-- Enabling HTTPS listener -->
+                <https-listener name="https" socket-binding="https" security-realm="UndertowRealm"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <filter-ref name="server-header"/>
